@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseDatasourceOrThrow success environment variable reference finds when nicely formatted 1`] = `
+Object {
+  "_tag": "ParsedDatasourceUrlEnvironmentVariable",
+  "environmentVariableName": "FOOBAR",
+  "name": "db",
+  "provider": "postgres",
+  "sources": Object {
+    "url": "env(\\"FOOBAR\\")",
+  },
+}
+`;
+
+exports[`parseDatasourceOrThrow success environment variable reference finds when white space before or after quotes 1`] = `
+Object {
+  "_tag": "ParsedDatasourceUrlEnvironmentVariable",
+  "environmentVariableName": "FOOBAR",
+  "name": "db",
+  "provider": "postgres",
+  "sources": Object {
+    "url": "env(  \\"FOOBAR\\"  )",
+  },
+}
+`;
+
+exports[`parseDatasourceOrThrow success finds inline connection string 1`] = `
+Object {
+  "_tag": "ParsedDatasourceUrlInline",
+  "connectionString": "...",
+  "name": "db",
+  "provider": "postgres",
+  "sources": Object {
+    "url": "\\"...\\"",
+  },
+}
+`;
+
+exports[`parseDatasourceOrThrow success ignores comments a whole datasource block 1`] = `
+Object {
+  "_tag": "ParsedDatasourceUrlEnvironmentVariable",
+  "environmentVariableName": "...",
+  "name": "db",
+  "provider": "postgres",
+  "sources": Object {
+    "url": "env(\\"...\\")",
+  },
+}
+`;
+
+exports[`parseDatasourceOrThrow success ignores comments single field lines 1`] = `
+Object {
+  "_tag": "ParsedDatasourceUrlEnvironmentVariable",
+  "environmentVariableName": "...",
+  "name": "db",
+  "provider": "postgres",
+  "sources": Object {
+    "url": "env(\\"...\\")",
+  },
+}
+`;
+
+exports[`parseDatasourceOrThrow thrown errors An invalid provider field causes an error 1`] = `"Failed to parse datasource: Datasource is missing a valid provider type"`;
+
+exports[`parseDatasourceOrThrow thrown errors Datasource block missing url field causes an error 1`] = `"Failed to parse datasource: No valid datasource block found."`;
+
+exports[`parseDatasourceOrThrow thrown errors Missing a provider field causes an error 1`] = `"Failed to parse datasource: Datasource is missing a valid provider type"`;
+
+exports[`parseDatasourceOrThrow thrown errors multiple data source blocks causes an error 1`] = `"Failed to parse datasource: Multiple datasource blocks found."`;
