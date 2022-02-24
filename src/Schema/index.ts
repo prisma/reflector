@@ -1,6 +1,9 @@
-import { replaceContent } from '~/helpers'
+import { replaceContent } from '../lib/helpers'
+import { getDMMF } from '@prisma/sdk'
 import endent from 'endent'
 import { z } from 'zod'
+
+export type DMMFDocument = Awaited<ReturnType<typeof getDMMF>>
 
 const providerTypeInput = {
   sqlite: 'sqlite',
@@ -235,6 +238,11 @@ export const ReferentialIntegritySettingValue = {
  * @see https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-integrity
  */
 export type ReferentialIntegritySettingValue = keyof typeof ReferentialIntegritySettingValue
+
+/**
+ * @see https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-integrity
+ */
+export const referentialIntegritySettingValueDefault = ReferentialIntegritySettingValue.foreignKeys
 
 export const PreviewFlag = {
   mongoDb: 'mongoDb',

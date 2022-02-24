@@ -18,3 +18,10 @@ export const casesHandled = (x: never): never => {
   // eslint-disable-next-line
   throw new Error(`All cases were not handled:\n${inspect(x)}`)
 }
+
+/**
+ * A variant of ReturnType that works on classes to to get their instance type.
+ */
+// prettier-ignore
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ReturnTypeClassInstance<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any

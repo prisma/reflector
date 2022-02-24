@@ -1026,6 +1026,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^3.10.0":
+  version: 3.10.0
+  resolution: "@prisma/client@npm:3.10.0"
+  dependencies:
+    "@prisma/engines-version": 3.10.0-50.73e60b76d394f8d37d8ebd1f8918c79029f0db86
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: c9fe863abfbcecff6b26c2fc4c93de77fd11c8209e91b8e2cba13ba3f0866d228eb5e92fac43e1f75497b652db54cb5e309320c3d51e603a4ecb4125dbf3a872
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:3.8.1":
   version: 3.8.1
   resolution: "@prisma/debug@npm:3.8.1"
@@ -1066,6 +1080,13 @@ __metadata:
     terminal-link: 2.1.1
     undici: 3.3.6
   checksum: bdde9047af5a8126fbecaf8c4a0a66b13b999471724ec663e150d6dcdd4cf4bf2b1955eb3b7305db12489f1c49c3fd088f77a60078fac61acb23007e08889dae
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:3.10.0-50.73e60b76d394f8d37d8ebd1f8918c79029f0db86":
+  version: 3.10.0-50.73e60b76d394f8d37d8ebd1f8918c79029f0db86
+  resolution: "@prisma/engines-version@npm:3.10.0-50.73e60b76d394f8d37d8ebd1f8918c79029f0db86"
+  checksum: ddcb3bfdab61ac74e2df9e57562ccc7f0eb863955c8cf711f52f45572168f65e030e5070dfc9fc2e37d916b97b236576006b5cd56c813257a96b825c598e79fa
   languageName: node
   linkType: hard
 
@@ -1174,6 +1195,7 @@ __metadata:
   dependencies:
     "@opentelemetry/api": ^1.0.4
     "@prisma-labs/prettier-config": 0.1.0
+    "@prisma/client": ^3.10.0
     "@prisma/sdk": ^3.9.2
     "@swc/core": 1.2.140
     "@swc/helpers": 0.3.3
@@ -1209,6 +1231,8 @@ __metadata:
     typescript-snapshots-plugin: 1.7.0
     typescript-transform-paths: 3.3.1
     zod: ^3.11.6
+  peerDependencies:
+    "@prisma/client": ^3.5
   languageName: unknown
   linkType: soft
 
