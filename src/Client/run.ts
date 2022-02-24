@@ -1,7 +1,13 @@
+import {
+  OperationModelName,
+  OperationModelOutput,
+  OperationOutput,
+  OperationRawName,
+  OperationRawOutput,
+} from '.'
 import { ClientBase } from './api'
 import { modelNameToClientPropertyName } from './helpers'
-import { OperationModelName, OperationModelOutput, OperationRawName, OperationRawOutput } from './operations'
-import { casesHandled } from '~/helpers'
+import { casesHandled } from '~/lib/helpers'
 
 export type RequestInput = RequestTransactionInput | RequestModelInput | RequestRawInput
 
@@ -22,7 +28,10 @@ export interface RequestModelInput {
   operationInput: unknown
 }
 
-export const runRequest = <Client extends ClientBase>(prismaClient: Client, requestInput: RequestInput) => {
+export const runRequest = <Client extends ClientBase>(
+  prismaClient: Client,
+  requestInput: RequestInput
+): Promise<OperationOutput> => {
   return requestInput._tag === 'RequestTransactionInput'
     ? prismaClient.$transaction(requestInput.singulars.map((_) => runRequestModel(prismaClient, _)))
     : requestInput._tag === 'RequestModelInput'

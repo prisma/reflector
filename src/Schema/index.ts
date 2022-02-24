@@ -1,6 +1,9 @@
-import { replaceContent } from '~/helpers'
+import { getDMMF } from '@prisma/sdk'
+import { replaceContent } from '~/lib/helpers'
 import endent from 'endent'
 import { z } from 'zod'
+
+export type DMMFDocument = Awaited<ReturnType<typeof getDMMF>>
 
 const providerTypeInput = {
   sqlite: 'sqlite',
