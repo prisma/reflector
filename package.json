@@ -1,6 +1,6 @@
 {
   "name": "@prisma/utils",
-  "version": "0.0.0-dripip.pr.2.5",
+  "version": "0.0.0-dripip.pr.2.10",
   "repository": "git@github.com:jasonkuhrt/@prisma/utils.git",
   "author": "Jason Kuhrt",
   "license": "MIT",
