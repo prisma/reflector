@@ -1,3 +1,4 @@
+import { casesHandled } from '../lib/helpers'
 import {
   OperationModelName,
   OperationModelOutput,
@@ -7,7 +8,6 @@ import {
 } from '.'
 import { ClientBase } from './api'
 import { modelNameToClientPropertyName } from './helpers'
-import { casesHandled } from '~/lib/helpers'
 
 export type RequestInput = RequestTransactionInput | RequestModelInput | RequestRawInput
 

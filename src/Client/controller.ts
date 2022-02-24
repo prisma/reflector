@@ -1,11 +1,11 @@
+import { Engines, Schema } from '../index_'
+import { Base64 } from '../lib/base64'
 import { ClientBase, DMMF, OperationOutput, RequestInput, runRequest } from '.'
 // @ts-expect-error This is a private API of the Prisma Client package.
 import * as PrismaClientGenerator from '@prisma/client/generator-build'
 import * as PrismaClientRuntimeLocal from '@prisma/client/runtime'
 import * as PrismaClientRuntimeProxy from '@prisma/client/runtime/proxy'
 import { getDMMF } from '@prisma/sdk'
-import { Engines, Schema } from '~/index_'
-import { Base64 } from '~/lib/base64'
 import * as Crypto from 'crypto'
 import * as fs from 'fs-jetpack'
 import * as Path from 'path'
