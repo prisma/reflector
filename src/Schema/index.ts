@@ -239,6 +239,11 @@ export const ReferentialIntegritySettingValue = {
  */
 export type ReferentialIntegritySettingValue = keyof typeof ReferentialIntegritySettingValue
 
+/**
+ * @see https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-integrity
+ */
+export const referentialIntegritySettingValueDefault = ReferentialIntegritySettingValue.foreignKeys
+
 export const PreviewFlag = {
   mongoDb: 'mongoDb',
   /**
