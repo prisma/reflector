@@ -16,7 +16,9 @@ describe('parseDatasourceOrThrow', () => {
             url = env("...")
           }
         `)
-        expect(result1.provider).toEqual(PrismaUtils.Schema.ProviderTypeNormalized._def.values.postgres)
+        expect(result1.provider).toEqual(
+          PrismaUtils.Schema.DatasourceProviderTypeNormalized._def.values.postgres
+        )
         expect(result1.provider).toEqual(result2.provider)
       })
     })
