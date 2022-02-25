@@ -1,4 +1,5 @@
 export * as Client from './Client'
+export * as ConnectionString from './ConnectionString'
 export * as Constants from './Constants'
 export * as Engines from './Engines'
 export * as Errors from './Errors'
