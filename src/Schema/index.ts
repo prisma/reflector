@@ -245,6 +245,9 @@ export type ReferentialIntegritySettingValue = keyof typeof ReferentialIntegrity
 export const referentialIntegritySettingValueDefault = ReferentialIntegritySettingValue.foreignKeys
 
 export const PreviewFlag = {
+  /**
+   * @see https://www.prisma.io/docs/concepts/database-connectors/mongodb
+   */
   mongoDb: 'mongoDb',
   /**
    * @see https://www.prisma.io/docs/concepts/components/prisma-data-platform#step-3-enable-the-feature-flag-in-the-prisma-schema-file
@@ -284,13 +287,28 @@ export const addPreviewFlag = (params: { prismaSchemaContent: string; previewFla
   }
 }
 
+/**
+ * @see https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-integrity
+ */
 export const setReferentialIntegrity = (params: {
   prismaSchemaContent: string
   value: ReferentialIntegritySettingValue
-}) => {
-  return replaceContent({
-    content: params.prismaSchemaContent,
+}): string => {
+  if (params.value === referentialIntegritySettingValueDefault) {
+    // TODO removePreviewFlag({...})
+    return params.prismaSchemaContent
+  }
+
+  const content1 = addPreviewFlag({
+    prismaSchemaContent: params.prismaSchemaContent,
+    previewFlag: PreviewFlag.referentialIntegrity,
+  })
+
+  const content2 = replaceContent({
+    content: content1,
     pattern: /(url *= *env\(".+"\))/,
     replacement: `$1\n  referentialIntegrity = "${params.value}"`,
   })
+
+  return content2
 }
