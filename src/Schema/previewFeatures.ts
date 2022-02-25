@@ -1,4 +1,4 @@
-import { replaceContent } from '~/lib/helpers'
+import { replaceContent } from '../lib/helpers'
 
 /**
  * @see https://www.prisma.io/docs/concepts/components/preview-features/client-preview-features

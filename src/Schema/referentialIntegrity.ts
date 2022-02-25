@@ -1,6 +1,6 @@
+import { replaceContent } from '../lib/helpers'
 import { SchemaTransformer } from './helpers'
 import { addPreviewFeatureFlag, PreviewFeatureFlag } from './previewFeatures'
-import { replaceContent } from '~/lib/helpers'
 
 /**
  * @see https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-integrity

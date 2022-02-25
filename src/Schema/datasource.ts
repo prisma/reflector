@@ -5,7 +5,7 @@
  */
 
 import { replaceContent } from '../lib/helpers'
-import { createEnvValue, createValue } from '.'
+import { createEnvValue, createValue } from './create'
 import { SchemaTransformer } from './helpers'
 import { z } from 'zod'
 
