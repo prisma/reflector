@@ -135,13 +135,13 @@ export const parseDatasourceOrThrow = (schema: string): ParsedDatasource => {
 /**
  * @returns File contents with replaced datasource. File path and content parameters do not need to match.
  */
-export const setDatasourceProvider: SchemaTransformer<{ datasourceProvider: DatasourceProviderInput }> = (
+export const setDatasourceProvider: SchemaTransformer<{ value: DatasourceProviderInput }> = (
   params
 ): string => {
   return replaceContent({
     content: params.prismaSchemaContent,
     pattern: datasourceProviderPattern,
-    replacement: `provider = "${params.datasourceProvider}"`,
+    replacement: `provider = "${params.value}"`,
   })
 }
 
