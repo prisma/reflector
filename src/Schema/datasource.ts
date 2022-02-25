@@ -22,7 +22,7 @@ export const DatasourceProviderInput = z.nativeEnum(datasourceProviderInput)
 
 export type DatasourceProviderInput = z.infer<typeof DatasourceProviderInput>
 
-const DatasourceProviderNormalized = {
+const datasourceProviderNormalized = {
   sqlite: 'sqlite',
   postgres: 'postgres',
   mysql: 'mysql',
@@ -30,9 +30,9 @@ const DatasourceProviderNormalized = {
   mongodb: 'mongodb',
 } as const
 
-export const DatasourceProviderTypeNormalized = z.nativeEnum(DatasourceProviderNormalized)
+export const DatasourceProviderNormalized = z.nativeEnum(datasourceProviderNormalized)
 
-export type DatasourceProviderNormalized = z.infer<typeof DatasourceProviderTypeNormalized>
+export type DatasourceProviderNormalized = z.infer<typeof DatasourceProviderNormalized>
 
 const datasourceProviderTypeInputNormalizedMapping: Record<
   DatasourceProviderInput,
