@@ -20,7 +20,7 @@ export type ProviderTypeInput = z.infer<typeof ProviderTypeInput>
 
 const providerTypeNormalized = {
   sqlite: 'sqlite',
-  postgres: 'postgres',
+  postgresql: 'postgresql',
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
@@ -32,14 +32,14 @@ export type ProviderTypeNormalized = z.infer<typeof ProviderTypeNormalized>
 
 const providerTypeInputNormalizedMapping: Record<ProviderTypeInput, ProviderTypeNormalized> = {
   sqlite: 'sqlite',
-  postgresql: 'postgres',
-  postgres: 'postgres',
+  postgresql: 'postgresql',
+  postgres: 'postgresql',
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
 }
 
-const normalizeProviderType = (a: ProviderTypeInput): ProviderTypeNormalized => {
+export const normalizeProviderType = (a: ProviderTypeInput): ProviderTypeNormalized => {
   return providerTypeInputNormalizedMapping[a]
 }
 
@@ -292,5 +292,16 @@ export const setReferentialIntegrity = (params: {
     content: params.prismaSchemaContent,
     pattern: /(url *= *env\(".+"\))/,
     replacement: `$1\n  referentialIntegrity = "${params.value}"`,
+  })
+}
+
+export const replaceSchemaProvider = (params: {
+  prismaSchemaContent: string
+  datasourceProvider: PrismaDatabaseTypeNormalized
+}) => {
+  return replaceContent({
+    content: params.prismaSchemaContent,
+    pattern: /provider *= *"postgresql"/,
+    replacement: `provider = "${params.datasourceProvider}"`,
   })
 }
