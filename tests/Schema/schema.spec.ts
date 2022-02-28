@@ -3,7 +3,7 @@ import { PrismaUtils } from '~/index'
 describe('parseDatasourceOrThrow', () => {
   describe('success', () => {
     describe('provider type input is accepted, but normalized upon return', () => {
-      it('postgresql becomes postgres', () => {
+      it('postgres becomes postgresql', () => {
         const result1 = PrismaUtils.Schema.parseDatasourceOrThrow(`
           datasource db {
             provider = "postgres"
@@ -16,7 +16,7 @@ describe('parseDatasourceOrThrow', () => {
             url = env("...")
           }
         `)
-        expect(result1.provider).toEqual(PrismaUtils.Schema.ProviderTypeNormalized._def.values.postgres)
+        expect(result1.provider).toEqual(PrismaUtils.Schema.ProviderTypeNormalized._def.values.postgresql)
         expect(result1.provider).toEqual(result2.provider)
       })
     })

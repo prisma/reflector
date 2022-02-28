@@ -3,7 +3,7 @@ import { ProviderTypeInput } from '~/Schema'
 /**
  * @returns A valid dummy connection string for the given datasource provider.
  */
-export function generate(datasourceProvider: ProviderTypeInput) {
+export const generate = (datasourceProvider: ProviderTypeInput) => {
   switch (datasourceProvider) {
     case 'postgresql':
       return 'postgresql://prisma:prisma@localhost:5444/doesntexist'

@@ -5,7 +5,7 @@ Object {
   "_tag": "ParsedDatasourceUrlEnvironmentVariable",
   "environmentVariableName": "FOOBAR",
   "name": "db",
-  "provider": "postgres",
+  "provider": "postgresql",
   "sources": Object {
     "url": "env(\\"FOOBAR\\")",
   },
@@ -17,7 +17,7 @@ Object {
   "_tag": "ParsedDatasourceUrlEnvironmentVariable",
   "environmentVariableName": "FOOBAR",
   "name": "db",
-  "provider": "postgres",
+  "provider": "postgresql",
   "sources": Object {
     "url": "env(  \\"FOOBAR\\"  )",
   },
@@ -29,7 +29,7 @@ Object {
   "_tag": "ParsedDatasourceUrlInline",
   "connectionString": "...",
   "name": "db",
-  "provider": "postgres",
+  "provider": "postgresql",
   "sources": Object {
     "url": "\\"...\\"",
   },
@@ -41,7 +41,7 @@ Object {
   "_tag": "ParsedDatasourceUrlEnvironmentVariable",
   "environmentVariableName": "...",
   "name": "db",
-  "provider": "postgres",
+  "provider": "postgresql",
   "sources": Object {
     "url": "env(\\"...\\")",
   },
@@ -53,7 +53,7 @@ Object {
   "_tag": "ParsedDatasourceUrlEnvironmentVariable",
   "environmentVariableName": "...",
   "name": "db",
-  "provider": "postgres",
+  "provider": "postgresql",
   "sources": Object {
     "url": "env(\\"...\\")",
   },
