@@ -1,31 +1,29 @@
-import { PrismaUtils } from '~/index'
+import { Reflector } from '~/index'
 
 describe('parseDatasourceOrThrow', () => {
   describe('success', () => {
     describe('provider type input is accepted, but normalized upon return', () => {
       it('postgresql becomes postgres', () => {
-        const result1 = PrismaUtils.Schema.parseDatasourceOrThrow(`
+        const result1 = Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {
             provider = "postgres"
             url = env("...")
           }
         `)
-        const result2 = PrismaUtils.Schema.parseDatasourceOrThrow(`
+        const result2 = Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {
             provider = "postgresql"
             url = env("...")
           }
         `)
-        expect(result1.provider).toEqual(
-          PrismaUtils.Schema.DatasourceProviderTypeNormalized._def.values.postgres
-        )
+        expect(result1.provider).toEqual(Reflector.Schema.DatasourceProviderNormalized._def.values.postgres)
         expect(result1.provider).toEqual(result2.provider)
       })
     })
     describe('ignores comments', () => {
       test('a whole datasource block', () => {
         expect(
-          PrismaUtils.Schema.parseDatasourceOrThrow(`
+          Reflector.Schema.parseDatasourceOrThrow(`
             //datasource db_old {
             //  url = env("...old")
             //}
@@ -39,7 +37,7 @@ describe('parseDatasourceOrThrow', () => {
       })
       test('single field lines', () => {
         expect(
-          PrismaUtils.Schema.parseDatasourceOrThrow(`
+          Reflector.Schema.parseDatasourceOrThrow(`
             datasource db {
               // url = env("bad1")
               url = env("...")
@@ -55,7 +53,7 @@ describe('parseDatasourceOrThrow', () => {
 
     test('finds inline connection string', () => {
       expect(
-        PrismaUtils.Schema.parseDatasourceOrThrow(`
+        Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {
             url = "..."
               provider = "postgres"
@@ -66,7 +64,7 @@ describe('parseDatasourceOrThrow', () => {
     describe('environment variable reference', () => {
       test('finds when nicely formatted', () => {
         expect(
-          PrismaUtils.Schema.parseDatasourceOrThrow(`
+          Reflector.Schema.parseDatasourceOrThrow(`
             datasource db {
               url = env("FOOBAR")
               provider = "postgres"
@@ -77,7 +75,7 @@ describe('parseDatasourceOrThrow', () => {
 
       test('finds when white space before or after quotes', () => {
         expect(
-          PrismaUtils.Schema.parseDatasourceOrThrow(`
+          Reflector.Schema.parseDatasourceOrThrow(`
             datasource db {
               url = env(  "FOOBAR"  )
               provider = "postgres"
@@ -90,7 +88,7 @@ describe('parseDatasourceOrThrow', () => {
   describe('thrown errors', () => {
     test('multiple data source blocks causes an error', () => {
       expect(() =>
-        PrismaUtils.Schema.parseDatasourceOrThrow(`
+        Reflector.Schema.parseDatasourceOrThrow(`
           datasource db1 {
             url = "..."
           }
@@ -104,14 +102,14 @@ describe('parseDatasourceOrThrow', () => {
 
     test('Datasource block missing url field causes an error', () => {
       expect(() =>
-        PrismaUtils.Schema.parseDatasourceOrThrow(`
+        Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {}
         `)
       ).toThrowErrorMatchingSnapshot()
     })
     test('Missing a provider field causes an error', () => {
       expect(() =>
-        PrismaUtils.Schema.parseDatasourceOrThrow(`
+        Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {
             url = "..."
           }
@@ -120,7 +118,7 @@ describe('parseDatasourceOrThrow', () => {
     })
     test('An invalid provider field causes an error', () => {
       expect(() =>
-        PrismaUtils.Schema.parseDatasourceOrThrow(`
+        Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {
             url = "..."
             provider = "sqlitee"
