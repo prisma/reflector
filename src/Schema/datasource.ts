@@ -146,14 +146,43 @@ export const setDatasourceProvider: SchemaTransformer<{ value: DatasourceProvide
 }
 
 /**
- * Change the datasource block url field value to be an environment variable reference.
+ * Change the datasource block url field value.
  *
- * If the schema is currently using an inline url then it will be replaced with an environment variable reference.
+ * Use the `environmentVariable` parameter to control if the value is set as
+ * environment variable name or an inline connection string.
  *
- * If the schema is currently using an environment variable reference already, then just the environment variable name being referenced will change.
+ * By default the value is set as an inline connection string.
  *
- * Throws if no valid datasource block is found
- * Throws if multiple valid datasource url blocks are found.
+ * No validation is performed on the value. So invalid connection strings will be permitted for example.
+ *
+ * @throws If the given schema has no valid datasource block.
+ * @throws If the given schema has multiple valid datasource blocks.
+ *
+ * @example
+ *
+ * ```ts
+ * const prismaSchemaContent = `
+ *   datasource db {
+ *     url = "postgres://user:pass@localhost:5432/db"
+ *   }
+ * `
+ * setDatasourceUrlOrThrow({
+ *   environmentVariable: true,
+ *   value: 'DB_URL',
+ *   prismaSchemaContent,
+ * }) // ->
+ *    // datasource db {
+ *    //   url = env("DB_URL")
+ *    // }
+ *
+ * setDatasourceUrlOrThrow({
+ *   value: 'foobar',
+ *   prismaSchemaContent,
+ * }) // ->
+ *    // datasource db {
+ *    //   url = "foobar"
+ *    // }
+ * ```
  */
 export const setDatasourceUrlOrThrow: SchemaTransformer<{
   /**
