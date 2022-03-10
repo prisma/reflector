@@ -28,34 +28,18 @@ jobs:
     name: Check if NPM_TOKEN secret is set
     runs-on: ubuntu-latest
     outputs:
-      is_NPM_TOKEN_set: ${{ steps.checkNpmTokenSet.outputs.is_MY_SECRET_set }}
+      isNpmTokenSecretSet: ${{steps.checkNpmTokenSet.outputs.is_MY_SECRET_set}}
     steps:
       - name: Check if NPM_TOKEN secret is set
         id: checkNpmTokenSet
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo "is_NPM_TOKEN_set: ${{ env.NPM_TOKEN != '' }}"
-          echo "::set-output name=is_NPM_TOKEN_set::${{ env.NPM_TOKEN != '' }}"
+          echo "isNpmTokenSecretSet: ${{secrets.NPM_TOKEN != ''}}"
+          echo "::set-output name=isNpmTokenSecretSet::${{secrets.NPM_TOKEN != ''}}"
 
   release-canary:
-    needs: [test, checkNpmTokenSet]
-    if: needs.checkNpmTokenSet.outputs.is_NPM_TOKEN_set == 'true'
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-          cache: yarn
-      - name: Install Dependencies
-        run: yarn install --immutable
-      - name: Release Canary
-        run: |
-          yarn dripip preview --json > result.json
-          jq '.' < result.json
+    needs: [checkNpmTokenSet]
+    if: needs.checkNpmTokenSet.outputs.isNpmTokenSecretSet == 'true'
+    uses: prisma-labs/dripip/.github/workflows/release.yml@master
+      secrets:
+        npmToken: ${{secrets.NPM_TOKEN}}
+        githubToken: ${{secrets.GITHUB_TOKEN}}
