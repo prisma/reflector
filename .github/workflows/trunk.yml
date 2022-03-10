@@ -28,18 +28,18 @@ jobs:
     name: Check if NPM_TOKEN secret is set
     runs-on: ubuntu-latest
     outputs:
-      is_NPM_TOKEN_set: ${{ steps.checkNpmTokenSet.outputs.is_MY_SECRET_set }}
+      isNpmTokenSet: ${{ steps.checkNpmTokenSet.outputs.is_MY_SECRET_set }}
     steps:
       - name: Check if NPM_TOKEN secret is set
         id: checkNpmTokenSet
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo "is_NPM_TOKEN_set: ${{ env.NPM_TOKEN != '' }}"
-          echo "::set-output name=is_NPM_TOKEN_set::${{ env.NPM_TOKEN != '' }}"
+          echo "isNpmTokenSet: ${{ env.NPM_TOKEN != '' }}"
+          echo "::set-output name=isNpmTokenSet::${{ env.NPM_TOKEN != '' }}"
 
-  # release-canary:
-  #   uses: prisma-labs/dripip/.github/workflows/release.yml@master
-  #     secrets:
-  #       npmToken: ${{secrets.NPM_TOKEN}}
-  #       githubToken: ${{secrets.GITHUB_TOKEN}}
+  release-canary:
+    uses: prisma-labs/dripip/.github/workflows/release.yml@master
+    secrets:
+      npmToken: ${{secrets.NPM_TOKEN}}
+      githubToken: ${{secrets.GITHUB_TOKEN}}
