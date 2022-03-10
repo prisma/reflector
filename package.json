@@ -40,14 +40,14 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.0.4",
-    "@prisma/sdk": "^3.9.2",
     "remeda": "^0.0.32",
     "tslib": "^2.3.1",
     "zod": "^3.11.6"
   },
   "devDependencies": {
     "@prisma-labs/prettier-config": "0.1.0",
-    "@prisma/client": "^3.10.0",
+    "@prisma/client": "3.10.0",
+    "@prisma/sdk": "3.10.0",
     "@swc/core": "1.2.140",
     "@swc/helpers": "0.3.3",
     "@swc/jest": "^0.2.17",
@@ -81,6 +81,7 @@
     "typescript-transform-paths": "3.3.1"
   },
   "peerDependencies": {
-    "@prisma/client": "^3.5"
+    "@prisma/client": "^3.9",
+    "@prisma/sdk": "^3.9"
   }
 }
