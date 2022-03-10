@@ -40,7 +40,7 @@ jobs:
     needs: [checkNpmTokenSet]
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{needs.checkNpmTokenSet.outputs}}'
+      - run: echo '${{toJson(needs.checkNpmTokenSet.outputs)}}'
 
   release-canary:
     needs: [checkNpmTokenSet]
