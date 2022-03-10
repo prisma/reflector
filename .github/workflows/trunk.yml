@@ -36,6 +36,12 @@ jobs:
           echo "isNpmTokenSet: ${{ secrets.NPM_TOKEN != '' }}"
           echo "::set-output name=isNpmTokenSet::${{ secrets.NPM_TOKEN != '' }}"
 
+  release-canary-1:
+    needs: [checkNpmTokenSet]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{needs.checkNpmTokenSet.outputs.is_NPM_TOKEN_set}}'
+
   release-canary:
     needs: [checkNpmTokenSet]
     if: needs.checkNpmTokenSet.outputs.is_NPM_TOKEN_set == true
