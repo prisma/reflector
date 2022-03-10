@@ -40,11 +40,11 @@ jobs:
     needs: [checkNpmTokenSet]
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{needs.checkNpmTokenSet.outputs.isNpmTokenSet}}'
+      - run: echo '${{needs.checkNpmTokenSet.outputs}}'
 
   release-canary:
     needs: [checkNpmTokenSet]
-    if: needs.checkNpmTokenSet.outputs.isNpmTokenSet == true
+    if: needs.checkNpmTokenSet.outputs.isNpmTokenSet == 'true'
     uses: prisma-labs/dripip/.github/workflows/release.yml@master
     secrets:
       npmToken: ${{secrets.NPM_TOKEN}}
