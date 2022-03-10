@@ -23,7 +23,7 @@ jobs:
       - run: yarn build
       - run: yarn test
 
-  # https://github.community/t/how-can-i-test-if-secrets-are-available-in-an-action/17911/10?u=jasonkuhrt
+  # https://github.community/t/how-can-i-test-if-secrets-are-available-in-an-action/17911/10
   checkNpmTokenSet:
     name: Check if NPM_TOKEN secret is set
     runs-on: ubuntu-latest
@@ -39,8 +39,6 @@ jobs:
           echo "::set-output name=is_NPM_TOKEN_set::${{ env.NPM_TOKEN != '' }}"
 
   release-canary:
-    needs: [checkNpmTokenSet]
-    if: needs.checkNpmTokenSet.outputs.is_NPM_TOKEN_set == 'true'
     uses: prisma-labs/dripip/.github/workflows/release.yml@master
       secrets:
         npmToken: ${{secrets.NPM_TOKEN}}
