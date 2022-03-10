@@ -38,7 +38,7 @@ jobs:
 
   release-canary:
     needs: [checkNpmTokenSet]
-    if: needs.checkNpmTokenSet.outputs.is_NPM_TOKEN_set == 'true'
+    if: needs.checkNpmTokenSet.outputs.is_NPM_TOKEN_set == true
     uses: prisma-labs/dripip/.github/workflows/release.yml@master
     secrets:
       npmToken: ${{secrets.NPM_TOKEN}}
