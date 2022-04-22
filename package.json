@@ -13,6 +13,10 @@
     ".": {
       "require": "./dist-cjs/index.js",
       "import": "./dist-esm/index.js"
+    },
+    "./schema": {
+      "require": "./dist-cjs/Schema/index.js",
+      "import": "./dist-esm/Schema/index.js"
     }
   },
   "main": "./dist-cjs/index.js",
