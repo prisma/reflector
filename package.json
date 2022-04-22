@@ -1,6 +1,6 @@
 {
   "name": "@prisma-spectrum/reflector",
-  "version": "0.0.0-pr.9.2.e2fdbb9",
+  "version": "0.0.0-pr.9.3.5cbd126",
   "repository": "git@github.com:prisma/reflector.git",
   "author": "Jason Kuhrt",
   "license": "MIT",
@@ -9,26 +9,6 @@
     "dist-cjs",
     "dist-esm"
   ],
-  "exports": {
-    ".": {
-      "require": "./dist-cjs/index.js",
-      "import": "./dist-esm/index.js"
-    },
-    "./schema": {
-      "require": "./dist-cjs/Schema/index.js",
-      "import": "./dist-esm/Schema/index.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "schema": [
-        "./dist-cjs/Schema/index.d.ts"
-      ],
-      "*": [
-        "./*"
-      ]
-    }
-  },
   "main": "./dist-cjs/index.js",
   "module": "./dist-esm/index.js",
   "scripts": {
