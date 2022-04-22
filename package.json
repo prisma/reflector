@@ -1,6 +1,6 @@
 {
   "name": "@prisma-spectrum/reflector",
-  "version": "0.0.0-pr.9.3.5cbd126",
+  "version": "0.0.0-dripip",
   "repository": "git@github.com:prisma/reflector.git",
   "author": "Jason Kuhrt",
   "license": "MIT",
