@@ -24,8 +24,8 @@ jobs:
       - run: yarn test
 
   release-canary:
+    needs: [test]
     runs-on: ubuntu-latest
-    needs: [test-unit]
     steps:
       - uses: prisma-labs/dripip@master
         with:
