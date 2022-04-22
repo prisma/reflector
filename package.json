@@ -1,6 +1,6 @@
 {
   "name": "@prisma-spectrum/reflector",
-  "version": "0.0.0-pr.9.1.a3a33b7",
+  "version": "0.0.0-pr.9.2.e2fdbb9",
   "repository": "git@github.com:prisma/reflector.git",
   "author": "Jason Kuhrt",
   "license": "MIT",

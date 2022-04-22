@@ -9,6 +9,8 @@
     }
   },
   "compilerOptions": {
+    // Until Prisma PDP modernizes its nextjs/webpack versions
+    "target": "ES5",
     // Make the compiler stricter, catch more errors
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
