@@ -5,6 +5,16 @@ on:
     branches: [main]
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+      - uses: prisma/action-node-cache-dependencies@main
+
   test:
     strategy:
       matrix:
@@ -18,8 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: yarn
-      - name: Install Dependencies
-        run: yarn install --immutable
+      - uses: prisma/action-node-cache-dependencies@main
       - run: yarn build
       - run: yarn test
 
