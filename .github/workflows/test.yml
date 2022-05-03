@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
-          with:
-            node-version: ${{matrix.node-version}}
+        with:
+          node-version: ${{matrix.node-version}}
       - run: yarn build
       - run: yarn test
