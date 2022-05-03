@@ -2,6 +2,16 @@ import { Reflector } from '~/index'
 
 describe('parseDatasourceOrThrow', () => {
   describe('success', () => {
+    test('finds inline connection string', () => {
+      expect(
+        Reflector.Schema.parseDatasourceOrThrow(`
+          datasource db {
+            url = "..."
+              provider = "postgres"
+          }
+        `)
+      ).toMatchSnapshot()
+    })
     describe('provider type input is accepted, but normalized upon return', () => {
       it('postgresql becomes postgres', () => {
         const result1 = Reflector.Schema.parseDatasourceOrThrow(`
@@ -51,16 +61,6 @@ describe('parseDatasourceOrThrow', () => {
       })
     })
 
-    test('finds inline connection string', () => {
-      expect(
-        Reflector.Schema.parseDatasourceOrThrow(`
-          datasource db {
-            url = "..."
-              provider = "postgres"
-          }
-        `)
-      ).toMatchSnapshot()
-    })
     describe('environment variable reference', () => {
       test('finds when nicely formatted', () => {
         expect(
@@ -104,6 +104,15 @@ describe('parseDatasourceOrThrow', () => {
       expect(() =>
         Reflector.Schema.parseDatasourceOrThrow(`
           datasource db {}
+        `)
+      ).toThrowErrorMatchingSnapshot()
+    })
+    test('Missing a url field causes an error', () => {
+      expect(() =>
+        Reflector.Schema.parseDatasourceOrThrow(`
+          datasource db {
+            provider = "sqlite"
+          }
         `)
       ).toThrowErrorMatchingSnapshot()
     })

@@ -60,10 +60,22 @@ Object {
 }
 `;
 
-exports[`parseDatasourceOrThrow thrown errors An invalid provider field causes an error 1`] = `"Failed to parse datasource: Datasource is missing a valid provider type"`;
+exports[`parseDatasourceOrThrow thrown errors An invalid provider field causes an error 1`] = `"Failed to parse datasource: No valid provder property set."`;
 
-exports[`parseDatasourceOrThrow thrown errors Datasource block missing url field causes an error 1`] = `"Failed to parse datasource: No valid datasource block found."`;
+exports[`parseDatasourceOrThrow thrown errors Datasource block missing url field causes an error 1`] = `"Failed to parse datasource: No valid provder property set."`;
 
-exports[`parseDatasourceOrThrow thrown errors Missing a provider field causes an error 1`] = `"Failed to parse datasource: Datasource is missing a valid provider type"`;
+exports[`parseDatasourceOrThrow thrown errors Missing a provider field causes an error 1`] = `"Failed to parse datasource: No valid provder property set."`;
+
+exports[`parseDatasourceOrThrow thrown errors Missing a url field causes an error 1`] = `
+"Failed to parse datasource: No url property found:
+
+Pattern:
+/^\\\\s*url\\\\s*=\\\\s*([^\\\\n]+)\\\\s*$/gm
+
+Code:
+datasource db {
+            provider = \\"sqlite\\"
+          }"
+`;
 
 exports[`parseDatasourceOrThrow thrown errors multiple data source blocks causes an error 1`] = `"Failed to parse datasource: Multiple datasource blocks found."`;
