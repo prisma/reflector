@@ -50,21 +50,47 @@ const normalizeDatasourceProvider = (a: DatasourceProviderInput): DatasourceProv
   return datasourceProviderTypeInputNormalizedMapping[a]
 }
 
+// TODO Use this pattern once Safari supports negative lookbehind
+// /**
+//  * Note this pattern relies on negative lookbehind which regexp 101 does not support.
+//  * Therefore there is no link to it for this complex pattern. Look at test suite.
+//  */
+// const datasourceUrlInBlockPattern =
+//   /datasource\s+([^{\s]+)\s*{[^{]*(?<!\/\/.*)url\s*=\s*("[^"]+"|env\(\s*"[^"]+"\s*\))[^}]*}/g
+
 /**
- * Note this pattern relies on negative lookbehind which regexp 101 does not support.
- * Therefore there is no link to it for this complex pattern. Look at test suite.
+ * @see https://regex101.com/r/LpShvf/4
  */
-const datasourceUrlInBlockPattern =
-  /datasource\s+([^{\s]+)\s*{[^{]*(?<!\/\/.*)url\s*=\s*("[^"]+"|env\(\s*"[^"]+"\s*\))[^}]*}/g
+const datasourceBlockPattern = /^(?<!\/\/)\s*(datasource\s+([^{\s]+)\s*{(?:\s|[^}])*})/gm
 
-const datasourceUrlEnvPattern = /env\(\s*"(.+)"\s*\)/
-
-const datasourceProviderPattern = new RegExp(
+/**
+ * This expression is safe to use on match group 1 from {@link datasourceBlockPattern}.
+ */
+const datasourceBlockFieldProviderPattern = new RegExp(
   `^\\s*provider\\s*=\\s*"(${Object.values(DatasourceProviderInput._def.values).join('|')})"`,
-  'm'
+  'gm'
 )
 
-const datasourceUrlInlinePattern = /"(.+)"/
+/**
+ * This pattern is safe to use on match group 1 from {@link datasourceBlockPattern}.
+ *
+ * @see https://regex101.com/r/Cv6qth/2
+ */
+const datasourceBlockFieldUrlPattern = /^\s*url\s*=\s*([^\n]+)\s*$/gm
+
+/**
+ * This pattern is safe to use on match group 1 from {@link datasourceBlockFieldUrlPattern}.
+ *
+ * @see https://regex101.com/r/TmEuzw/2
+ */
+const datasourceBlockFieldUrlEnvPattern = /env\(\s*"([^"]+)"\s*\)/
+
+/**
+ * This pattern is safe to use on match group 1 from {@link datasourceBlockFieldUrlPattern}.
+ *
+ * @see https://regex101.com/r/OQTF4m/3
+ */
+const datasourceBlockFieldUrlLiteralPattern = /"([^"]+)"/
 
 /**
  * Parse the datasource url from the Prisma schema.
@@ -73,63 +99,77 @@ const datasourceUrlInlinePattern = /"(.+)"/
  * Throws if multiple valid datasource url blocks are found.
  */
 export const parseDatasourceOrThrow = (schema: string): ParsedDatasource => {
-  const matchResults = Array.from(schema.matchAll(datasourceUrlInBlockPattern))
-
-  if (matchResults.length === 0) {
-    throw new Error(`Failed to parse datasource: No valid datasource block found.`)
+  const blockResults = Array.from(schema.matchAll(datasourceBlockPattern))
+  if (blockResults.length === 0) {
+    throw new Error(`Failed to parse datasource: No datasource block found.`)
   }
-
-  if (matchResults.length > 1) {
+  if (blockResults.length > 1) {
     throw new Error(`Failed to parse datasource: Multiple datasource blocks found.`)
   }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
+  const blockResult = blockResults[0]!
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
+  const blockCode = blockResult[1]!
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
+  const blockName = blockResult[2]!
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
-  const matchResult = matchResults[0]!
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
-  const group1 = matchResult[1]!
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
-  const group2 = matchResult[2]!
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
-  const matchResultProviderType = matchResult[0]!.match(datasourceProviderPattern)
-
-  if (!matchResultProviderType) {
-    throw new Error(`Failed to parse datasource: Datasource is missing a valid provider type`)
+  const fieldProviderResults = Array.from(blockCode.matchAll(datasourceBlockFieldProviderPattern))
+  if (fieldProviderResults.length === 0) {
+    throw new Error(`Failed to parse datasource: No valid provder property set.`)
   }
-
+  if (fieldProviderResults.length > 1) {
+    throw new Error(`Failed to parse datasource: Multiple provder properties set.`)
+  }
   // @ts-expect-error The regexp guarantees that this string is "parsed" into an expected value.
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
-  const provider = normalizeDatasourceProvider(matchResultProviderType[1]!)
+  const provider = normalizeDatasourceProvider(fieldProviderResults[0]![1]!)
 
-  const environmentVariableName = group2.match(datasourceUrlEnvPattern)?.[1]
-  if (environmentVariableName) {
+  const fieldUrlResults = Array.from(blockCode.matchAll(datasourceBlockFieldUrlPattern))
+  if (fieldUrlResults.length === 0) {
+    throw new Error(
+      `Failed to parse datasource: No url property found:\n\nPattern:\n${String(
+        datasourceBlockFieldUrlPattern
+      )}\n\nCode:\n${blockCode}`
+    )
+  }
+  if (fieldUrlResults.length > 1) {
+    throw new Error(`Failed to parse datasource: Multiple url properties found.`)
+  }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
+  const urlValue = fieldUrlResults[0]![1]!
+
+  const urlEnvResult = urlValue.match(datasourceBlockFieldUrlEnvPattern)
+  if (urlEnvResult) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
+    const environmentVariableName = urlEnvResult[1]!
     return {
       _tag: 'ParsedDatasourceUrlEnvironmentVariable',
       environmentVariableName,
-      name: group1,
+      name: blockName,
       provider: provider,
       sources: {
-        url: group2,
+        url: urlValue,
       },
     }
   }
 
-  const connectionString = group2.match(datasourceUrlInlinePattern)?.[1]
-
-  if (connectionString) {
+  const urlLiteralResult = urlValue.match(datasourceBlockFieldUrlLiteralPattern)
+  if (urlLiteralResult) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- match guarantees this is not null
+    const connectionString = urlLiteralResult[1]!
     return {
       _tag: 'ParsedDatasourceUrlInline',
       connectionString,
-      name: group1,
+      name: blockName,
       provider: provider,
       sources: {
-        url: group2,
+        url: urlValue,
       },
     }
   }
 
   // This is impossible because group1 match to begin with necessitates that either the env or inline pattern is present.
-  throw new Error(`Failed to parse datasource url value: ${group2}`)
+  throw new Error(`Failed to parse datasource url property: ${urlValue}`)
 }
 
 /**
@@ -140,7 +180,7 @@ export const setDatasourceProvider: SchemaTransformer<{ value: DatasourceProvide
 ): string => {
   return replaceContent({
     content: params.prismaSchemaContent,
-    pattern: datasourceProviderPattern,
+    pattern: datasourceBlockFieldProviderPattern,
     replacement: `provider = "${params.value}"`,
   })
 }
