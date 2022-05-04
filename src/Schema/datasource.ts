@@ -50,14 +50,6 @@ const normalizeDatasourceProvider = (a: DatasourceProviderInput): DatasourceProv
   return datasourceProviderTypeInputNormalizedMapping[a]
 }
 
-// TODO Use this pattern once Safari supports negative lookbehind
-// /**
-//  * Note this pattern relies on negative lookbehind which regexp 101 does not support.
-//  * Therefore there is no link to it for this complex pattern. Look at test suite.
-//  */
-// const datasourceUrlInBlockPattern =
-//   /datasource\s+([^{\s]+)\s*{[^{]*(?<!\/\/.*)url\s*=\s*("[^"]+"|env\(\s*"[^"]+"\s*\))[^}]*}/g
-
 /**
  * @see https://regex101.com/r/LpShvf/5
  */
