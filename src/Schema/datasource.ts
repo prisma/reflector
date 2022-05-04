@@ -59,9 +59,9 @@ const normalizeDatasourceProvider = (a: DatasourceProviderInput): DatasourceProv
 //   /datasource\s+([^{\s]+)\s*{[^{]*(?<!\/\/.*)url\s*=\s*("[^"]+"|env\(\s*"[^"]+"\s*\))[^}]*}/g
 
 /**
- * @see https://regex101.com/r/LpShvf/4
+ * @see https://regex101.com/r/LpShvf/5
  */
-const datasourceBlockPattern = /^(?<!\/\/)\s*(datasource\s+([^{\s]+)\s*{(?:\s|[^}])*})/gm
+const datasourceBlockPattern = /^(?!\/\/)\s*(datasource\s+([^{\s]+)\s*{(?:\s|[^}])*})/gm
 
 /**
  * This expression is safe to use on match group 1 from {@link datasourceBlockPattern}.
