@@ -50,7 +50,7 @@ export const code = {
   dataProxy: {
     dataProxyUnauthorized: 'P5007',
   },
-}
+} as const
 
 export const codes = {
   ...code.common,
