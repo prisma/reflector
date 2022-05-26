@@ -10,91 +10,90 @@ import * as Crypto from 'crypto'
 import * as fs from 'fs-jetpack'
 import * as Path from 'path'
 
-export const getPrismaClient = (params: {
+export const getPrismaClient = async (params: {
   schema: { path: string; contents: string }
   connectionString: string
   useDataProxy: boolean
-}) => {
-  return async (): Promise<ClientBase> => {
+}): Promise<ClientBase> => {
+  /**
+   * About programmatically passing the connection string.
+   *
+   * The only way to pass to Proxy Runtime is via inlineDatasources configuration (A).
+   *
+   * The only way to pass to Local Runtime is via the constructor (B).
+   *
+   * @see https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#programmatically-override-a-datasource-url
+   */
+  const datasource = Schema.parseDatasourceOrThrow(params.schema.contents)
+  const prismaClientDmmf = await getDmmf(params.schema.contents)
+  const schemaContentsBase64 = Base64.to(params.schema.contents)
+  const schemaContentsHashed = Crypto.createHash('sha256').update(schemaContentsBase64).digest('hex')
+  const PrismaClientRuntime = params.useDataProxy ? PrismaClientRuntimeProxy : PrismaClientRuntimeLocal
+  // eslint-disable-next-line
+  const prismaClientVersion = require('@prisma/client').Prisma.prismaVersion.client as string
+  /**
+   * Currently the query engine always needs the schema on disk even if its not being used.
+   *
+   * @see https://github.com/prisma/prisma/issues/11599
+   */
+  if (!params.useDataProxy) {
+    await fs.writeAsync(params.schema.path, params.schema.contents)
+  }
+  const PrismaClient = PrismaClientRuntime.getPrismaClient({
     /**
-     * About programmatically passing the connection string.
-     *
-     * The only way to pass to Proxy Runtime is via inlineDatasources configuration (A).
-     *
-     * The only way to pass to Local Runtime is via the constructor (B).
-     *
-     * @see https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#programmatically-override-a-datasource-url
+     * (A)
      */
-    const datasource = Schema.parseDatasourceOrThrow(params.schema.contents)
-    const prismaClientDmmf = await getDmmf(params.schema.contents)
-    const schemaContentsBase64 = Base64.to(params.schema.contents)
-    const schemaContentsHashed = Crypto.createHash('sha256').update(schemaContentsBase64).digest('hex')
-    const PrismaClientRuntime = params.useDataProxy ? PrismaClientRuntimeProxy : PrismaClientRuntimeLocal
-    /**
-     * Currently the query engine always needs the schema on disk even if its not being used.
-     *
-     * @see https://github.com/prisma/prisma/issues/11599
-     */
-    if (!params.useDataProxy) {
-      await fs.writeAsync(params.schema.path, params.schema.contents)
-    }
-    const PrismaClient = PrismaClientRuntime.getPrismaClient({
-      /**
-       * (A)
-       */
-      ...(params.useDataProxy
-        ? {
-            inlineDatasources: {
-              [datasource.name]: {
-                url: {
-                  fromEnvVar: null,
-                  value: params.connectionString,
-                },
+    ...(params.useDataProxy
+      ? {
+          inlineDatasources: {
+            [datasource.name]: {
+              url: {
+                fromEnvVar: null,
+                value: params.connectionString,
               },
             },
-          }
-        : {}),
-      inlineSchema: schemaContentsBase64,
-      inlineSchemaHash: schemaContentsHashed,
-      document: prismaClientDmmf,
-      generator: {
-        name: 'client',
-        provider: {
-          value: 'prisma-client-js',
-          fromEnvVar: null,
-        },
-        config: params.useDataProxy ? { engineType: 'dataproxy' } : { engineType: 'library' },
-        output: null,
-        binaryTargets: [],
-        previewFeatures: [],
-      },
-      clientVersion: 'in-memory',
-      engineVersion: 'in-memory',
-      dirname: Path.dirname(params.schema.path),
-      activeProvider: datasource.provider,
-      datasourceNames: [datasource.name],
-      // TODO What are these for? SQLite-specific options? Why required then?
-      relativePath: '',
-      relativeEnvPaths: {
-        rootEnvPath: '',
-        schemaEnvPath: '',
-      },
-    })
-
-    /**
-     * (B)
-     */
-    // @ts-expect-error TODO
-    return params.useDataProxy
-      ? new PrismaClient()
-      : new PrismaClient({
-          datasources: {
-            [datasource.name]: {
-              url: params.connectionString,
-            },
           },
-        })
-  }
+        }
+      : {}),
+    inlineSchema: schemaContentsBase64,
+    inlineSchemaHash: schemaContentsHashed,
+    document: prismaClientDmmf,
+    generator: {
+      name: 'client',
+      provider: {
+        value: 'prisma-client-js',
+        fromEnvVar: null,
+      },
+      config: params.useDataProxy ? { engineType: 'dataproxy' } : { engineType: 'library' },
+      output: null,
+      binaryTargets: [],
+      previewFeatures: [],
+    },
+    clientVersion: prismaClientVersion,
+    dirname: Path.dirname(params.schema.path),
+    activeProvider: datasource.provider,
+    datasourceNames: [datasource.name],
+    // TODO What are these for? SQLite-specific options? Why required then?
+    relativePath: '',
+    relativeEnvPaths: {
+      rootEnvPath: '',
+      schemaEnvPath: '',
+    },
+  })
+
+  /**
+   * (B)
+   */
+  // @ts-expect-error TODO
+  return params.useDataProxy
+    ? new PrismaClient()
+    : new PrismaClient({
+        datasources: {
+          [datasource.name]: {
+            url: params.connectionString,
+          },
+        },
+      })
 }
 
 export const request = async (prisma: ClientBase, request: RequestInput): Promise<OperationOutput> => {
