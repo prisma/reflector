@@ -66,3 +66,17 @@ const runRequestModel = <Client extends ClientBase>(
 
   return prismaClientModelOperation(requestSingularInput.operationInput)
 }
+
+export interface ExecuteSqlInput {
+  _tag: 'ExecuteSqlInput'
+  statements: string[]
+}
+
+export const runExecuteSql = async <Client extends ClientBase>(
+  prismaClient: Client,
+  requestInput: ExecuteSqlInput
+) => {
+  return await prismaClient.$transaction(
+    requestInput.statements.map((statement) => prismaClient.$executeRawUnsafe(`${statement}`))
+  )
+}

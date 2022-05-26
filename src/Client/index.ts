@@ -1,4 +1,5 @@
 export * from './api'
 export * from './controller'
+export * as Data from './Data'
 export * from './helpers'
 export * from './run'
