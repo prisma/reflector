@@ -8,9 +8,7 @@ const tsconfig: {
 } = TypeScript.readConfigFile('tsconfig.json', (path) => Fs.readFileSync(path, { encoding: 'utf-8' }))
 
 const config = {
-  transform: {
-    '^.+\\.ts$': '@swc/jest',
-  },
+  preset: 'ts-jest',
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.config?.compilerOptions?.paths ?? {}, {
     prefix: '<rootDir>',
   }),

@@ -1,4 +1,4 @@
-import { EngineEventType } from '.'
+import { EngineEventType } from './helpers'
 import { SomeDatasourceRecord, SomeModel } from './model'
 import * as Remeda from 'remeda'
 import { z } from 'zod'
