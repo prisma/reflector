@@ -69,3 +69,12 @@ const runRequestModel = <Client extends ClientBase>(
 
   return prismaClientModelOperation(requestSingularInput.operationInput)
 }
+
+/**
+ * Execute a series of SQL statements in a transaction. Beware, uses `$executeRawUnsafe` internally.
+ */
+export const runSqlStatements = async <Client extends ClientBase>(
+  prismaClient: Client,
+  sqlStatements: string[]
+) =>
+  prismaClient.$transaction(sqlStatements.map((sqlStatement) => prismaClient.$executeRawUnsafe(sqlStatement)))
