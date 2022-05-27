@@ -7,7 +7,8 @@ import {
   OperationRawOutput,
 } from '.'
 import { ClientBase } from './api'
-import { modelNameToClientPropertyName } from './helpers'
+import { modelNameToClientPropertyName, prepareMigrationScriptForClientExecution } from './helpers'
+import { DatasourceProviderNormalized } from '~/Schema'
 
 export type RequestInput = RequestTransactionInput | RequestModelInput | RequestRawInput
 
@@ -78,3 +79,18 @@ export const runSqlStatements = async <Client extends ClientBase>(
   sqlStatements: string[]
 ) =>
   prismaClient.$transaction(sqlStatements.map((sqlStatement) => prismaClient.$executeRawUnsafe(sqlStatement)))
+
+/**
+ * Execute a migration script as produced by migrate diff via the prisma client.
+ *
+ * @remarks One reason you might want to do this is if you want to run your migration via the PDP Data Plane.
+ * Currently it has a Client Proxy and Introspection Proxy but no Migration Proxy.
+ *
+ * A reason you might want to use the PDP Data Plane is if the user has allow-listed the static egress IPs of
+ * PDP Data Plane proxy services.
+ */
+export const runMigrationScript = async <Client extends ClientBase>(
+  prismaClient: Client,
+  script: string,
+  dataSource: DatasourceProviderNormalized
+) => runSqlStatements(prismaClient, prepareMigrationScriptForClientExecution({ script, dataSource }))
