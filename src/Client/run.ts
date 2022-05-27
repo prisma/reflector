@@ -13,7 +13,6 @@ export type RequestInput = RequestTransactionInput | RequestModelInput | Request
 
 export interface RequestTransactionInput {
   _tag: 'RequestTransactionInput'
-  // TODO can we mix model and raw here?
   singulars: (RequestModelInput | RequestRawInput)[]
 }
 export interface RequestRawInput {
