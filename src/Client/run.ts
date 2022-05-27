@@ -33,7 +33,11 @@ export const runRequest = <Client extends ClientBase>(
   requestInput: RequestInput
 ): Promise<OperationOutput> => {
   return requestInput._tag === 'RequestTransactionInput'
-    ? prismaClient.$transaction(requestInput.singulars.map((_) => runRequestModel(prismaClient, _)))
+    ? prismaClient.$transaction(
+        requestInput.singulars.map((_) =>
+          _._tag === 'RequestRawInput' ? runRequestRaw(prismaClient, _) : runRequestModel(prismaClient, _)
+        )
+      )
     : requestInput._tag === 'RequestModelInput'
     ? runRequestModel(prismaClient, requestInput)
     : requestInput._tag === 'RequestRawInput'
