@@ -43,7 +43,7 @@ export const getPrismaClient = async (params: {
      */
     ...(params.useDataProxy
       ? {
-          dataProxy: true,
+          dataProxy: params.useDataProxy,
           inlineDatasources: {
             [datasource.name]: {
               url: {
