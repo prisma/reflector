@@ -11,7 +11,15 @@ import * as fs from 'fs-jetpack'
 import * as Path from 'path'
 
 export const getPrismaClient = async (params: {
-  schema: { path: string; contents: string }
+  schema: {
+    contents: string
+    /**
+     * The path to where the prisma schema file should be written to disk. When NOT using the Data Proxy then the
+     * schema file will be written to this path. By default a schema.prisma file will be written to a temporary
+     * directory provided by the operating system.
+     */
+    path?: string
+  }
   connectionString: string
   useDataProxy: boolean
 }): Promise<ClientBase> => {
@@ -28,6 +36,7 @@ export const getPrismaClient = async (params: {
   const prismaClientDmmf = await getDmmf(params.schema.contents)
   const schemaContentsBase64 = Base64.to(params.schema.contents)
   const schemaContentsHashed = Crypto.createHash('sha256').update(schemaContentsBase64).digest('hex')
+  const schemaPath = params.schema.path ?? Path.join((await fs.tmpDirAsync()).cwd(), 'schema.prisma')
   const PrismaClientRuntime = params.useDataProxy ? PrismaClientRuntimeProxy : PrismaClientRuntimeLocal
   // eslint-disable-next-line
   const prismaClientVersion = require('@prisma/client').Prisma.prismaVersion.client as string
@@ -37,7 +46,7 @@ export const getPrismaClient = async (params: {
    * @see https://github.com/prisma/prisma/issues/11599
    */
   if (!params.useDataProxy) {
-    await fs.writeAsync(params.schema.path, params.schema.contents)
+    await fs.writeAsync(schemaPath, params.schema.contents)
   }
   const PrismaClient = PrismaClientRuntime.getPrismaClient({
     /**
@@ -70,7 +79,8 @@ export const getPrismaClient = async (params: {
       previewFeatures: [],
     },
     clientVersion: prismaClientVersion,
-    dirname: Path.dirname(params.schema.path),
+    // TODO remove this once https://github.com/prisma/prisma/issues/11599 is resolved.
+    dirname: Path.dirname(schemaPath),
     activeProvider: datasource.provider,
     datasourceNames: [datasource.name],
     // TODO What are these for? SQLite-specific options? Why required then?
