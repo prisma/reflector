@@ -79,6 +79,7 @@ export const getPrismaClient = async (params: {
       previewFeatures: [],
     },
     clientVersion: prismaClientVersion,
+    // TODO remove this once https://github.com/prisma/prisma/issues/11599 is resolved.
     dirname: Path.dirname(schemaPath),
     activeProvider: datasource.provider,
     datasourceNames: [datasource.name],
