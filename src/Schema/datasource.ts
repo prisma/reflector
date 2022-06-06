@@ -16,6 +16,7 @@ const datasourceProviderInput = {
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
+  cockroachdb: 'cockroachdb',
 } as const
 
 export const DatasourceProviderInput = z.nativeEnum(datasourceProviderInput)
@@ -28,6 +29,7 @@ const datasourceProviderNormalized = {
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
+  cockroachdb: 'cockroachdb',
 } as const
 
 export const DatasourceProviderNormalized = z.nativeEnum(datasourceProviderNormalized)
@@ -44,6 +46,7 @@ const datasourceProviderTypeInputNormalizedMapping: Record<
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
+  cockroachdb: 'cockroachdb',
 }
 
 const normalizeDatasourceProvider = (a: DatasourceProviderInput): DatasourceProviderNormalized => {
