@@ -1,8 +1,7 @@
 import { ReturnTypeClassInstance } from '../lib/helpers'
 // @ts-expect-error This is a private API of the Prisma Client package.
 import * as PrismaClientGenerator from '@prisma/client/generator-build'
-import { getPrismaClient } from '@prisma/client/runtime'
-import { DMMF } from '@prisma/client/runtime/proxy'
+import { DMMF, getPrismaClient } from '@prisma/client/runtime'
 import { DatasourceProviderNormalized } from '~/Schema'
 
 export { DMMF }
