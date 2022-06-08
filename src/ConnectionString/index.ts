@@ -5,6 +5,7 @@ import { Schema } from '../index_'
  */
 export const generate = (datasourceProvider: Schema.DatasourceProviderNormalized) => {
   switch (datasourceProvider) {
+    case 'cockroachdb':
     case 'postgres':
       return 'postgresql://prisma:prisma@localhost:5444/does_not_exist'
     case 'mysql':
