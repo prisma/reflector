@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "@prisma-labs/prettier-config": "0.1.0",
-    "@prisma/client": "3.14.0",
-    "@prisma/sdk": "3.14.0",
+    "@prisma/client": "^3.15.0",
+    "@prisma/sdk": "^3.15.0",
     "@swc/core": "1.2.194",
     "@swc/helpers": "0.3.16",
     "@swc/jest": "^0.2.21",
@@ -75,7 +75,7 @@
     "typescript-transform-paths": "3.3.1"
   },
   "peerDependencies": {
-    "@prisma/client": "^3.9",
-    "@prisma/sdk": "^3.9"
+    "@prisma/client": "^3.15",
+    "@prisma/sdk": "^3.15"
   }
 }
