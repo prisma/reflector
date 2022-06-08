@@ -36,7 +36,6 @@ export const getPrismaClient = async (params: {
   const schemaContentsBase64 = Base64.to(params.schema.contents)
   const schemaContentsHashed = Crypto.createHash('sha256').update(schemaContentsBase64).digest('hex')
   const schemaPath = params.schema.path ?? Path.join((await fs.tmpDirAsync()).cwd(), 'schema.prisma')
-  const PrismaClientRuntime = params.useDataProxy ? PrismaClientRuntimeProxy : PrismaClientRuntimeLocal
   // eslint-disable-next-line
   const prismaClientVersion = require('@prisma/client').Prisma.prismaVersion.client as string
   /**
