@@ -3,8 +3,7 @@ import { Base64 } from '../lib/base64'
 import { ClientBase, DMMF, OperationOutput, RequestInput, runRequest } from '.'
 // @ts-expect-error This is a private API of the Prisma Client package.
 import * as PrismaClientGenerator from '@prisma/client/generator-build'
-import * as PrismaClientRuntimeLocal from '@prisma/client/runtime'
-import * as PrismaClientRuntimeProxy from '@prisma/client/runtime/proxy'
+import * as PrismaClientRuntime from '@prisma/client/runtime'
 import { getDMMF } from '@prisma/sdk'
 import * as Crypto from 'crypto'
 import * as fs from 'fs-jetpack'
@@ -37,7 +36,6 @@ export const getPrismaClient = async (params: {
   const schemaContentsBase64 = Base64.to(params.schema.contents)
   const schemaContentsHashed = Crypto.createHash('sha256').update(schemaContentsBase64).digest('hex')
   const schemaPath = params.schema.path ?? Path.join((await fs.tmpDirAsync()).cwd(), 'schema.prisma')
-  const PrismaClientRuntime = params.useDataProxy ? PrismaClientRuntimeProxy : PrismaClientRuntimeLocal
   // eslint-disable-next-line
   const prismaClientVersion = require('@prisma/client').Prisma.prismaVersion.client as string
   /**
@@ -52,18 +50,15 @@ export const getPrismaClient = async (params: {
     /**
      * (A)
      */
-    ...(params.useDataProxy
-      ? {
-          inlineDatasources: {
-            [datasource.name]: {
-              url: {
-                fromEnvVar: null,
-                value: params.connectionString,
-              },
-            },
-          },
-        }
-      : {}),
+    dataProxy: params.useDataProxy,
+    inlineDatasources: {
+      [datasource.name]: {
+        url: {
+          fromEnvVar: null,
+          value: params.connectionString,
+        },
+      },
+    },
     inlineSchema: schemaContentsBase64,
     inlineSchemaHash: schemaContentsHashed,
     document: prismaClientDmmf,
@@ -73,7 +68,7 @@ export const getPrismaClient = async (params: {
         value: 'prisma-client-js',
         fromEnvVar: null,
       },
-      config: params.useDataProxy ? { engineType: 'dataproxy' } : { engineType: 'library' },
+      config: { engineType: 'library' },
       output: null,
       binaryTargets: [],
       previewFeatures: [],
