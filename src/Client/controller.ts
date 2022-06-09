@@ -50,7 +50,7 @@ export const getPrismaClient = async (params: {
     /**
      * (A)
      */
-    dataProxy: !!params.useDataProxy,
+    dataProxy: params.useDataProxy,
     inlineDatasources: {
       [datasource.name]: {
         url: {
