@@ -50,19 +50,15 @@ export const getPrismaClient = async (params: {
     /**
      * (A)
      */
-    ...(params.useDataProxy
-      ? {
-          dataProxy: params.useDataProxy,
-          inlineDatasources: {
-            [datasource.name]: {
-              url: {
-                fromEnvVar: null,
-                value: params.connectionString,
-              },
-            },
-          },
-        }
-      : {}),
+    dataProxy: !!params.useDataProxy,
+    inlineDatasources: {
+      [datasource.name]: {
+        url: {
+          fromEnvVar: null,
+          value: params.connectionString,
+        },
+      },
+    },
     inlineSchema: schemaContentsBase64,
     inlineSchemaHash: schemaContentsHashed,
     document: prismaClientDmmf,
