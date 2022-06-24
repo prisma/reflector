@@ -16,6 +16,7 @@ const datasourceProviderInput = {
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
+  'mongodb+srv': 'mongodb+srv',
   cockroachdb: 'cockroachdb',
 } as const
 
@@ -46,6 +47,7 @@ const datasourceProviderTypeInputNormalizedMapping: Record<
   mysql: 'mysql',
   sqlserver: 'sqlserver',
   mongodb: 'mongodb',
+  'mongodb+srv': 'mongodb',
   cockroachdb: 'cockroachdb',
 }
 
