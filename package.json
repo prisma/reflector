@@ -75,7 +75,7 @@
     "typescript-transform-paths": "3.3.1"
   },
   "peerDependencies": {
-    "@prisma/client": "4.0.0",
-    "@prisma/internals": "4.0.0"
+    "@prisma/client": "*",
+    "@prisma/internals": "*"
   }
 }
