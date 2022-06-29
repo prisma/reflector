@@ -4,7 +4,7 @@ import { ClientBase, DMMF, OperationOutput, RequestInput, runRequest } from '.'
 // @ts-expect-error This is a private API of the Prisma Client package.
 import * as PrismaClientGenerator from '@prisma/client/generator-build'
 import * as PrismaClientRuntime from '@prisma/client/runtime'
-import { getDMMF } from '@prisma/sdk'
+import { getDMMF } from '@prisma/internals'
 import * as Crypto from 'crypto'
 import * as fs from 'fs-jetpack'
 import * as Path from 'path'
