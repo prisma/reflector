@@ -1,5 +1,5 @@
 import { casesHandled } from './lib/helpers'
-import { getNodeAPIName, getPlatform } from '@prisma/sdk'
+import { getNodeAPIName, getPlatform } from '@prisma/internals'
 
 export type Kind = 'query'
 
