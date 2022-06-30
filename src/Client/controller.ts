@@ -104,7 +104,8 @@ export const getPrismaClient = async (params: {
 export const request = async (prisma: ClientBase, request: RequestInput): Promise<OperationOutput> => {
   try {
     await prisma.$connect()
-    return runRequest(prisma, request)
+    const result = await runRequest(prisma, request)
+    return result
   } finally {
     await prisma.$disconnect()
   }
