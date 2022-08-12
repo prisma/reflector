@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "@prisma-labs/prettier-config": "0.1.0",
-    "@prisma/client": "4.1.0",
-    "@prisma/internals": "4.1.0",
+    "@prisma/client": "4.2.1",
+    "@prisma/internals": "4.2.1",
     "@swc/core": "1.2.194",
     "@swc/helpers": "0.3.16",
     "@swc/jest": "^0.2.21",
